@@ -18,8 +18,6 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 
-;;theme
-(load-theme 'doom-outrun-electric t)
 
 ;;revert buffer when changed
 (global-auto-revert-mode 1)
@@ -55,6 +53,7 @@
   :custom ((doom-modeline-height 20)))
 
 (use-package doom-themes)
+(load-theme 'doom-outrun-electric t)
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
