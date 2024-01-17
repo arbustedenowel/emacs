@@ -42,7 +42,7 @@
 ;;(setq use-package-always-ensure t)
 
 (eval-after-load 'gnutls
-  '(add-to-list 'gnutls-trustfiles "/etc/ssl/cert.pem"))
+'(add-to-list 'gnutls-trustfiles "/etc/ssl/cert.pem"))
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -65,6 +65,9 @@
   :config
   (ivy-mode 1))
 
+(use-package counsel
+  :init (counsel-mode 1))
+
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
@@ -84,7 +87,7 @@
 (use-package evil
   :init (evil-mode 1))
     
-
+(use-package magit)
 
 
 
@@ -113,7 +116,7 @@
  '(custom-safe-themes
    '("9d5124bef86c2348d7d4774ca384ae7b6027ff7f6eb3c401378e298ce605f83a" default))
  '(package-selected-packages
-   '(evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
+   '(counsel magit evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
