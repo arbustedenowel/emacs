@@ -8,6 +8,11 @@
 ;;flashbang instead of tinitus
 (setq visible-bell t)
 
+;; global font
+
+(set-face-attribute 'default nil :font "Firacode Nerd Font" :height 160)
+
+
 ;;linenumber
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers 'relative)
@@ -38,8 +43,6 @@
 
 
 ;;bootstrap use package 
-;;(require 'use-package)
-;;(setq use-package-always-ensure t)
 
 (eval-after-load 'gnutls
 '(add-to-list 'gnutls-trustfiles "/etc/ssl/cert.pem"))
@@ -55,9 +58,16 @@
 
 
 
+;; theme, modline and ico 
+(use-package all-the-icons)
+(use-package doom-modeline
+  :ensure 
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 20)))
 
+(use-package doom-themes)
+(load-theme 'doom-outrun-electric t)
 
-(use-package command-log-mode)
 
 ;;better autocomplete
 (use-package ivy
@@ -67,14 +77,6 @@
 
 (use-package counsel
   :init (counsel-mode 1))
-
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 20)))
-
-(use-package doom-themes)
-(load-theme 'doom-outrun-electric t)
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -89,14 +91,21 @@
     
 (use-package magit)
 
+(use-package hydra)
 
+(defhydra hydra-buffer-fast-switch ()
+  "switch buffer"
+  ;;key
+  ("n" next-buffer "next")
+  ("b" previous-buffer "previous")
+  ("q" nil "quit" ))
+(global-set-key (kbd "C-M-j") 'hydra-buffer-fast-switch/body)
 
+(use-package org)
+(org-indent-mode)
 
-
-
-
-
-
+(use-package org-bullets
+  :after org) 
 
 
 
@@ -116,7 +125,7 @@
  '(custom-safe-themes
    '("9d5124bef86c2348d7d4774ca384ae7b6027ff7f6eb3c401378e298ce605f83a" default))
  '(package-selected-packages
-   '(counsel magit evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
+   '(hydra all-the-icons all-the-icon counsel magit evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
