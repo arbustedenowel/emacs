@@ -218,12 +218,19 @@
   ("q" nil "quit" ))
 (global-set-key (kbd "C-M-j") 'hydra-buffer-fast-switch/body)
 
+(defhydra hydra-size ()
+  "size"
+  ("n" ))
+
+
 (use-package org)
-(org-indent-mode)
 
 (use-package org-bullets
-  :after org) 
+  :after org)
 
+(dolist (mode '(org-mode-hook))
+  (add-hook mode (lambda () (org-indent-mode 1) (org-bullets-mode 1))))
+(use-package pdf-tools)
 
 
 
@@ -240,9 +247,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("9d5124bef86c2348d7d4774ca384ae7b6027ff7f6eb3c401378e298ce605f83a" default))
+   '("ff24d14f5f7d355f47d53fd016565ed128bf3af30eb7ce8cae307ee4fe7f3fd0" "f64189544da6f16bab285747d04a92bd57c7e7813d8c24c30f382f087d460a33" "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d" "77fff78cc13a2ff41ad0a8ba2f09e8efd3c7e16be20725606c095f9a19c24d3d" "013728cb445c73763d13e39c0e3fd52c06eefe3fbd173a766bfd29c6d040f100" "0c83e0b50946e39e237769ad368a08f2cd1c854ccbcd1a01d39fdce4d6f86478" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "dccf4a8f1aaf5f24d2ab63af1aa75fd9d535c83377f8e26380162e888be0c6a9" "4e2e42e9306813763e2e62f115da71b485458a36e8b4c24e17a2168c45c9cf9d" "9d5124bef86c2348d7d4774ca384ae7b6027ff7f6eb3c401378e298ce605f83a" default))
+ '(ispell-dictionary nil)
  '(package-selected-packages
-   '(treemacs-evil treemacs projectile dashboard doom-dashboard hydra all-the-icons all-the-icon counsel magit evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
+   '(pdf-tools treemacs-evil treemacs projectile dashboard doom-dashboard hydra all-the-icons all-the-icon counsel magit evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
