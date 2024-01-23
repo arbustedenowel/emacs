@@ -17,7 +17,6 @@
 (setq fancy-splash-screen "~/.config/emacs/great-wave-transparent-2.png")
 
 ;;linenumber
-(global-display-line-numbers-mode 1)
 (setq display-line-numbers 'relative)
 (dolist (mode '(org-mode-hook
 		term-mode-hook
@@ -25,6 +24,7 @@
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+(global-display-line-numbers-mode 1)
 
 
 ;;revert buffer when changed
@@ -56,7 +56,6 @@
   (require 'use-package))
 (require 'bind-key)
 (setq use-package-always-ensure t)
-
 
 
 (use-package treemacs
@@ -219,9 +218,6 @@
   ("q" nil "quit" ))
 (global-set-key (kbd "C-M-j") 'hydra-buffer-fast-switch/body)
 
-(defhydra hydra-size ()
-  "size"
-  ("n" ))
 
 
 (use-package org)
@@ -233,10 +229,51 @@
   (add-hook mode (lambda () (org-indent-mode 1) (org-bullets-mode 1))))
 (use-package pdf-tools)
 
+;;temp exwm conf
+(defun efs/exwm-update-class ()
+  (exwl-workspace-rename-buffer exwm-class-name))
 
 
+(require 'exwm)
+(setq exwm-workspace-number 5)
+(setq exwm-input-prefix-keys
+    '(?\C-x
+      ?\C-u
+      ?\C-h
+      ?\M-x
+      ?\M-`
+      ?\M-&
+      ?\M-:
+      ?\C-\M-j )) ;; Buffer list 
+(define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+(setq exwm-input-global-keys
+        `(
+          ;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
+          ([?\s-r] . exwm-reset)
 
+          ;; Move between windows
+          ([s-left] . windmove-left)
+          ([s-right] . windmove-right)
+          ([s-up] . windmove-up)
+          ([s-down] . windmove-down)
 
+	  
+          ;; Launch applications via shell command
+          ([?\s-&] . (lambda (command)
+                       (interactive (list (read-shell-command "$ ")))
+                       (start-process-shell-command command nil command)))
+
+          ;; Switch workspace
+          ([?\s-w] . exwm-workspace-switch)
+
+          ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
+          ,@(mapcar (lambda (i)
+                      `(,(kbd (format "s-%d" i)) .
+                        (lambda ()
+                          (interactive)
+                          (exwm-workspace-switch-create ,i))))
+                    (number-sequence 0 9))))
+(exwm-enable)
 
 
 
@@ -249,9 +286,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("46a843168cc83b28b740735516e6eea4f97769d848c79b5acab32f7a278f793a" "01aef17f41edea53c665cb57320bd80393761f836be5ab0bd53292afc94bd14d" "65af8e8d704bcd9745a4f191db756995de6b1fdd15cf2eb41befaae75f7b045d" "7d10494665024176a90895ff7836a8e810d9549a9872c17db8871900add93d5c" "5f92b9fc442528b6f106eaefa18bb5e7bfa0d737164e18f1214410fef2a6678d" "5e05db868f138062a3aedcccefe623eee18ec703ae25d4e5aebd65f892ac5bcc" "73c55f5fd22b6fd44f1979b6374ca7cc0a1614ee8ca5d4f1366a0f67da255627" "8ea6a46120abb34bf6a664b76d78014e0dd1f2b740a0976ec41313612421712f" "7964b513f8a2bb14803e717e0ac0123f100fb92160dcf4a467f530868ebaae3e" "691d671429fa6c6d73098fc6ff05d4a14a323ea0a18787daeb93fde0e48ab18b" "a6920ee8b55c441ada9a19a44e9048be3bfb1338d06fc41bce3819ac22e4b5a1" "34cf3305b35e3a8132a0b1bdf2c67623bc2cb05b125f8d7d26bd51fd16d547ec" "02d422e5b99f54bd4516d4157060b874d14552fe613ea7047c4a5cfa1288cf4f" "32f22d075269daabc5e661299ca9a08716aa8cda7e85310b9625c434041916af" "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "c8b3d9364302b16318e0f231981e94cbe4806cb5cde5732c3e5c3e05e1472434" "3fe1ebb870cc8a28e69763dde7b08c0f6b7e71cc310ffc3394622e5df6e4f0da" "f4d1b183465f2d29b7a2e9dbe87ccc20598e79738e5d29fc52ec8fb8c576fcfd" "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098" "571661a9d205cb32dfed5566019ad54f5bb3415d2d88f7ea1d00c7c794e70a36" "dd4582661a1c6b865a33b89312c97a13a3885dc95992e2e5fc57456b4c545176" "93011fe35859772a6766df8a4be817add8bfe105246173206478a0706f88b33d" "ff24d14f5f7d355f47d53fd016565ed128bf3af30eb7ce8cae307ee4fe7f3fd0" "f64189544da6f16bab285747d04a92bd57c7e7813d8c24c30f382f087d460a33" "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d" "77fff78cc13a2ff41ad0a8ba2f09e8efd3c7e16be20725606c095f9a19c24d3d" "013728cb445c73763d13e39c0e3fd52c06eefe3fbd173a766bfd29c6d040f100" "0c83e0b50946e39e237769ad368a08f2cd1c854ccbcd1a01d39fdce4d6f86478" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "dccf4a8f1aaf5f24d2ab63af1aa75fd9d535c83377f8e26380162e888be0c6a9" "4e2e42e9306813763e2e62f115da71b485458a36e8b4c24e17a2168c45c9cf9d" "9d5124bef86c2348d7d4774ca384ae7b6027ff7f6eb3c401378e298ce605f83a" default))
+ '(delete-selection-mode nil)
  '(ispell-dictionary nil)
  '(package-selected-packages
-   '(ef-themes pdf-tools treemacs-evil treemacs projectile dashboard doom-dashboard hydra all-the-icons all-the-icon counsel magit evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
+   '(exwm ef-themes pdf-tools treemacs-evil treemacs projectile dashboard doom-dashboard hydra all-the-icons all-the-icon counsel magit evil which-key rainbow-delimiters doom-themes doom-theme doom-modeline ivy command-log-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
