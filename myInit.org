@@ -1,0 +1,137 @@
+* my emacs config
+i making an emacs config its realllyyyy bare bone
+but it work for most basic stuff 
+** setting up the package mannager
+*** initialize package source
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("elpa"  . "https://elpa.gnu.org/packages/")))
+
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+#+end_src
+*** bootstraping use-package
+#+begin_src emacs-lisp
+  (eval-after-load 'gnutls
+  '(add-to-list 'gnutls-trustfiles "/etc/ssl/cert.pem"))
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (eval-when-compile
+    (require 'use-package))
+  (require 'bind-key)
+  (setq use-package-always-ensure t)
+  
+#+end_src
+** ui
+here i would configure the user interface like theme
+modeline etc
+*** essential modification
+#+begin_src emacs-lisp
+  ;;remove clutter/bloat base user interface
+
+  (menu-bar-mode -1) ;; menubar is no more 
+  (tool-bar-mode -1) ;; toolbar is dead
+  (scroll-bar-mode -1) ;; no scroll bar for u
+
+
+  ;;flashbang instead of tinitus
+  (setq visible-bell t)
+
+  ;; global font
+
+  (set-face-attribute 'default nil :font "Firacode Nerd Font" :height 160)
+#+end_src
+*** icon
+#+begin_src emacs-lisp
+  (use-package all-the-icons)
+#+end_src
+*** theme and modeline
+im using ef-themes and the doom modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure 
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 20)))
+  (use-package ef-themes)
+  (load-theme 'ef-bio t)
+#+end_src
+*** dashboard
+pretty dashboard mmmh beautifull using the default setings
+of the dashboard  package except the image
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config				
+    (dashboard-setup-startup-hook)
+    (setq dashboard-banner-logo-title "mmmh yees not doom emacs i promise"
+          dashboard-startup-banner "~/.config/emacs/great-wave-transparent-2-small.png"))
+  
+#+end_src
+*** special text highlighting
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+#+end_src
+*** helm
+not the way use-package is suposed to be used but it work
+#+begin_src emacs-lisp
+  (use-package helm)
+  (helm-mode 1)
+
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (setq completion-styles '(flex))
+#+end_src
+*** line number
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode 1)
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  vterm-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (setq display-line-numbers 'relative)
+#+end_src
+** useful integration
+*** git and project management
+#+begin_src emacs-lisp
+  (use-package magit)
+  (use-package projectile)
+#+end_src
+*** evil-mode might change to meow
+#+begin_src emacs-lisp
+      (use-package evil
+        :init (setq evil-want-C-i-jump nil) ;; this part is to avoid isue with tab in org-mode
+        :config (evil-mode))
+#+end_src
+*** which-key you will never be lost
+#+begin_src emacs-lisp
+      (use-package which-key
+        :init (which-key-mode)
+        :diminish wich-key-mode)
+#+end_src
+*** pdf-tools
+#+begin_src emacs-lisp
+   (use-package pdf-tools)
+#+end_src
+** mode
+*** org-mode
+#+begin_src emacs-lisp
+   (use-package org) ;;making sure its up to date
+   (use-package org-bullets
+     :after org)
+  
+   (dolist (mode '(org-mode-hook))
+     (add-hook mode (lambda () (org-indent-mode 1) (org-bullets-mode 1))))
+#+end_src
+** keybind 
+*** nuke
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
