@@ -91,12 +91,17 @@ not the way use-package is suposed to be used but it work
 #+begin_src emacs-lisp
   (global-display-line-numbers-mode 1)
   (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  vterm-mode-hook
-                  shell-mode-hook
-                  eshell-mode-hook))
+		  term-mode-hook
+		  vterm-mode-hook
+		  shell-mode-hook
+		  eshell-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
   (setq display-line-numbers 'relative)
+#+end_src
+*** auto-complete
+#+begin_src emacs-lisp
+  (use-package company)
+  (add-hook 'after-init-hook global-company-mode)
 #+end_src
 ** useful integration
 *** git and project management
@@ -106,9 +111,10 @@ not the way use-package is suposed to be used but it work
 #+end_src
 *** evil-mode might change to meow
 #+begin_src emacs-lisp
-      (use-package evil
-        :init (setq evil-want-C-i-jump nil) ;; this part is to avoid isue with tab in org-mode
-        :config (evil-mode))
+  (use-package evil
+    :init (setq evil-want-C-i-jump nil ;; this part is to avoid isue with tab in org-mode
+                evil-undo-system 'undo-redo)
+    :config (evil-mode))
 #+end_src
 *** which-key you will never be lost
 #+begin_src emacs-lisp
@@ -120,7 +126,44 @@ not the way use-package is suposed to be used but it work
 #+begin_src emacs-lisp
    (use-package pdf-tools)
 #+end_src
+*** lsp-mode
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :hook (prog-mode . lsp-mode))
+#+end_src
 ** mode
+*** c-mode
+#+begin_src emacs-lisp
+     (defun c-lineup-arglist-tabs-only (ignored)
+    "Line up argument lists by tabs, not spaces"
+    (let* ((anchor (c-langelem-pos c-syntactic-element))
+           (column (c-langelem-2nd-pos c-syntactic-element))
+           (offset (- (1+ column) anchor))
+           (steps (floor offset c-basic-offset)))
+      (* (max steps 1)
+         c-basic-offset)))
+
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              ;; Add kernel style
+              (c-add-style
+               "linux-tabs-only"
+               '("linux" (c-offsets-alist
+                          (arglist-cont-nonempty
+                           c-lineup-gcc-asm-reg
+                           c-lineup-arglist-tabs-only))))))
+
+  (add-hook 'c-mode-hook
+            (lambda ()
+              (let ((filename (buffer-file-name)))
+                ;; Enable kernel mode for the appropriate files
+                (when (and filename
+                           (string-match (expand-file-name "~/src/linux-trees")
+                                         filename))
+                  (setq indent-tabs-mode t)
+                  (setq show-trailing-whitespace t)
+                  (c-set-style "linux-tabs-only")))))
+#+end_src
 *** org-mode
 #+begin_src emacs-lisp
    (use-package org) ;;making sure its up to date
