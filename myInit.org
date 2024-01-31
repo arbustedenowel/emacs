@@ -24,7 +24,7 @@ but it work for most basic stuff
     (require 'use-package))
   (require 'bind-key)
   (setq use-package-always-ensure t)
-  
+  (package-refresh-contents) ;;workaround when use-package cannot install package
 #+end_src
 ** ui
 here i would configure the user interface like theme
@@ -125,6 +125,10 @@ not the way use-package is suposed to be used but it work
 *** pdf-tools
 #+begin_src emacs-lisp
    (use-package pdf-tools)
+#+end_src
+*** better terminal
+#+begin_src emacs-lisp
+  
 #+end_src
 *** lsp-mode
 #+begin_src emacs-lisp
