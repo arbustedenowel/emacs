@@ -7,8 +7,8 @@ but it work for most basic stuff
   (require 'package)
 
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("elpa"  . "https://elpa.gnu.org/packages/")))
-
+			   ("elpa"  . "https://elpa.gnu.org/packages/")))
+  
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
@@ -103,6 +103,23 @@ not the way use-package is suposed to be used but it work
   (use-package company)
   (add-hook 'after-init-hook global-company-mode)
 #+end_src
+*** popup
+#+begin_src emacs-lisp
+  (use-package popper)
+  ;; Match eshell, shell, term and/or vterm buffers
+  (setq popper-reference-buffers
+        (append popper-reference-buffers
+                '("\\*Messages\\*"
+                  "Output\\*$"
+                  "\\*Async Shell Command\\*"
+                  "^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
+                  "^\\*shell.*\\*$"  shell-mode  ;shell as a popup
+                  "^\\*term.*\\*$"   term-mode   ;term as a popup
+                  "^\\*vterm.*\\*$"  vterm-mode  ;vterm as a popup
+                  helm-mode
+                  )))
+  (popper-mode +1) 
+#+end_src
 ** useful integration
 *** git and project management
 #+begin_src emacs-lisp
@@ -128,7 +145,9 @@ not the way use-package is suposed to be used but it work
 #+end_src
 *** better terminal
 #+begin_src emacs-lisp
-  
+  (use-package vterm
+    :ensure t)
+  (define-key evil-normal-state-map (kbd "SPC o t") 'vterm )
 #+end_src
 *** lsp-mode
 #+begin_src emacs-lisp
