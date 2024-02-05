@@ -128,10 +128,15 @@ not the way use-package is suposed to be used but it work
 #+end_src
 *** evil-mode might change to meow
 #+begin_src emacs-lisp
-  (use-package evil
-    :init (setq evil-want-C-i-jump nil ;; this part is to avoid isue with tab in org-mode
-                evil-undo-system 'undo-redo)
-    :config (evil-mode))
+  ;;(use-package evil
+  ;;  :init (setq evil-want-C-i-jump nil ;; this part is to avoid isue with tab in org-mode
+  ;;              evil-undo-system 'undo-redo)
+  ;;  :config (evil-mode))
+
+  (org-babel-load-file (expand-file-name "~/.config/emacs/meow_keybind.org"))
+  (use-package meow)
+  (meow-setup)
+  (meow-global-mode 1)
 #+end_src
 *** which-key you will never be lost
 #+begin_src emacs-lisp
