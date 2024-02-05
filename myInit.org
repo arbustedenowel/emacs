@@ -124,6 +124,7 @@ not the way use-package is suposed to be used but it work
 *** git and project management
 #+begin_src emacs-lisp
   (use-package magit)
+  (global-set-key (kbd "C-x C-g") 'magit)
   (use-package projectile)
 #+end_src
 *** evil-mode might change to meow
