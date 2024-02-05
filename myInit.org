@@ -8,7 +8,7 @@ but it work for most basic stuff
 
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			   ("elpa"  . "https://elpa.gnu.org/packages/")))
-  
+
   (package-initialize)
   (unless package-archive-contents
     (package-refresh-contents))
@@ -152,8 +152,7 @@ not the way use-package is suposed to be used but it work
 #+begin_src emacs-lisp
   (use-package vterm
     :ensure t)
-  (define-key evil-normal-state-map (kbd "SPC o t") 'vterm )
-#+end_src
+  #+end_src
 *** lsp-mode
 #+begin_src emacs-lisp
   (use-package lsp-mode
