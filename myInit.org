@@ -201,6 +201,10 @@ not the way use-package is suposed to be used but it work
    (dolist (mode '(org-mode-hook))
      (add-hook mode (lambda () (org-indent-mode 1) (org-bullets-mode 1))))
 #+end_src
+*** java-mode
+#+begin_src emacs-lisp
+  (use-package lsp-java)
+#+end_src
 ** keybind 
 *** nuke
 #+begin_src emacs-lisp
